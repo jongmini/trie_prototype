@@ -18,7 +18,7 @@ Trie.prototype.learn = function(word, index){
   // so that the words can be reconstructed later.
 
   index = index || 0;
-  
+
   if(this.characters[word[index]]){
     this.characters[word[index]].learn(word,index+1);
   } else {
@@ -38,9 +38,19 @@ Trie.prototype.getWords = function(words, currentWord){
   // contained in this Trie.
   // it will use currentWord as a prefix,
   // since a Trie doesn't know about its parents.
-
-  
-  
+  words = words || [];
+  currentWord = currentWord || '';
+  if(this.isWord){
+    // currentWord += this.characters[];
+    words.push(currentWord);
+  }
+  for (var char in this.characters){
+    var newWord = currentWord + char;
+    if(this.characters[char].characters){
+      this.characters[char].getWords(words, newWord);
+    }
+  }
+  return words;
 
 };
 
@@ -49,6 +59,19 @@ Trie.prototype.find = function(word, index){
   // which corresponds to the end of the passed in word.
 
   // Be sure to consider what happens if the word is not in this Trie.
+
+  index = index || 0;
+  // console.log(word[index]);
+  // console.log(index);
+
+  if (index === word.length){
+    return this;
+  } else if (this.characters[word[index]]){
+    return this.characters[word[index]].find(word,index+1);
+  } else {
+    return false;
+  } 
+
 };
 
 Trie.prototype.autoComplete = function(prefix){
