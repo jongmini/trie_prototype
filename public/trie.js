@@ -40,8 +40,8 @@ Trie.prototype.getWords = function(words, currentWord){
   // since a Trie doesn't know about its parents.
   words = words || [];
   currentWord = currentWord || '';
+  
   if(this.isWord){
-    // currentWord += this.characters[];
     words.push(currentWord);
   }
   for (var char in this.characters){
@@ -61,8 +61,6 @@ Trie.prototype.find = function(word, index){
   // Be sure to consider what happens if the word is not in this Trie.
 
   index = index || 0;
-  // console.log(word[index]);
-  // console.log(index);
 
   if (index === word.length){
     return this;
@@ -71,11 +69,21 @@ Trie.prototype.find = function(word, index){
   } else {
     return false;
   } 
-
 };
 
 Trie.prototype.autoComplete = function(prefix){
   // This function will return all completions 
   // for a given prefix.
   // It should use find and getWords.
+
+  if(prefix!==""){
+    var result = this.find(prefix);
+    if(!result){
+      return [];
+    } else {
+    return result.getWords([],prefix);
+    }
+  } 
 };
+
+
