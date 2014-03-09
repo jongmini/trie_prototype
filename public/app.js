@@ -31,7 +31,7 @@ App.Views.Index = Backbone.View.extend({
   id: "index",
   // template: HandlebarsTemplates,
   events: {
-    'onkeypress #search_bar': "start"
+    "keyup #search": "start"
   },
   render: function(){
     // this.$el.html(this.template());
@@ -40,19 +40,27 @@ App.Views.Index = Backbone.View.extend({
     return this;
   },
 
-  start: function(event){
-    event.preventDefault();
+  start: function(){
 
     var search = $("#search").val();
-    var view = new App.Views.Result({});
-    this.$el.append(view.render().el);
-
+    var result = App.autocompleter.complete(search);
+    var list = "";
+    $.each(result, function(index, res){
+      list += "<li><a href=\"http://en.wikipedia.org/wiki/"+res+"\">"+res+"</a></li>";
+      // var resultView = App.Views.Result({collection: res});
+      // this.$el.append(resultView.render().el);
+    });
+    $("#results").html(list);
   }
-
 });
 
-App.Views.Result = Backbone.Router.extend({
+// App.Views.Result = Backbone.Router.extend({
   
-  
-});
+//   render: function(){
+//     $(this.el).html("<div>")
+//     return this;
+//   };
+
+
+// });
 
