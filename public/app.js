@@ -20,10 +20,25 @@ $(document).ready(function(){
 });
 
 App.Routers.Main = Backbone.Router.extend({
-  routes: {"":"index"},
+  routes: {
+    "":"index",
+    ":params": "index_with_params"
+  },
   index: function(){
     var view = new App.Views.Index();
     $("#container").html(view.render().el);
+  },
+
+  index_with_params: function(params){
+    // console.log("hello");
+    
+    var view = new App.Views.Index();
+    $("#container").html(view.render().el);
+    setTimeout(function(){
+      view.start_with_params(params);
+    },1000);
+
+
   }
 });
 
@@ -41,14 +56,25 @@ App.Views.Index = Backbone.View.extend({
   },
 
   start: function(){
-
+    console.log(this.model);
     var search = $("#search").val();
     var result = App.autocompleter.complete(search);
     var list = "";
     $.each(result, function(index, res){
       list += "<li><a href=\"http://en.wikipedia.org/wiki/"+res+"\">"+res+"</a></li>";
-      // var resultView = App.Views.Result({collection: res});
-      // this.$el.append(resultView.render().el);
+
+    });
+    $("#results").html(list);
+  },
+
+  start_with_params: function(params){
+    console.log(this.model);
+    var search = $("#search").val();
+    var result = App.autocompleter.complete(params);
+    var list = "";
+    $.each(result, function(index, res){
+      list += "<li><a href=\"http://en.wikipedia.org/wiki/"+res+"\">"+res+"</a></li>";
+
     });
     $("#results").html(list);
   }
